@@ -95,6 +95,11 @@ public class Bot {
             WEBSOCKET_SERVER.start();
         }
 
+        if (CONFIG.discordBot.enable) {
+            DISCORD_LOG.info("Starting the bot");
+            DISCORD_BOT.connect();
+        }
+
         Bot bot = new Bot();
         instance = bot;
         bot.start();

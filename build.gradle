@@ -52,6 +52,8 @@ repositories {
         name = "DaPorkchop_"
         url = "https://maven.daporkchop.net/"
     }
+
+    jcenter()
 }
 
 configurations {
@@ -75,6 +77,8 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    compile 'net.dv8tion:JDA:4.1.1_165'
 }
 
 task sourceJar(type: Jar) {

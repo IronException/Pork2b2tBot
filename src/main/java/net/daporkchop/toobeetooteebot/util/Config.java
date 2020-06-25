@@ -34,6 +34,7 @@ public final class Config {
     public Log log = new Log();
     public Server server = new Server();
     public Websocket websocket = new Websocket();
+    public DiscordBot discordBot = new DiscordBot();
 
     public static final class Authentication {
         public boolean doAuthentication = false;
@@ -178,6 +179,14 @@ public final class Config {
         public static final class Client {
             public int maxChatCount = 512;
         }
+    }
+
+    public static final class DiscordBot {
+        public String token = "tokenId";
+
+
+        public boolean enable = false;
+
     }
 
     private transient boolean donePostLoad = false;
