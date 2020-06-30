@@ -1,7 +1,6 @@
 package net.daporkchop.toobeetooteebot.discordbot;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.CONFIG;
-import static net.daporkchop.toobeetooteebot.util.Constants.DISCORD_LOG;
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
 /**
  * class that handles the events from the server and forwards it to the DiscordHandler
