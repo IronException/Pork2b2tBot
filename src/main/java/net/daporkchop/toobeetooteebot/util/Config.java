@@ -183,7 +183,7 @@ public final class Config {
 
     public static final class DiscordBot {
         public String token = "tokenId";
-
+        public long channelId = 0;
 
         public boolean enable = false;
 

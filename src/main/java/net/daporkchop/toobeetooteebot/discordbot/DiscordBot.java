@@ -14,7 +14,7 @@ public class DiscordBot {
     }
 
     public void connect() {
-        discordHandler.build(CONFIG.discordBot.token);
+        discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId);
         if(discordHandler.isRunning()) {
             DISCORD_LOG.success("Discord bot started!");
         } else {
