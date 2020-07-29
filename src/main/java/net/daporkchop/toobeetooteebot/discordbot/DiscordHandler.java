@@ -23,6 +23,7 @@ public class DiscordHandler extends ListenerAdapter {
         } catch (Exception ignored) {}
 
         this.channelId = channelId;
+        // TODO turn off if channelId is wrong
     }
 
     public boolean isRunning() {
@@ -40,8 +41,7 @@ public class DiscordHandler extends ListenerAdapter {
         } else {
             System.out.printf("[PM] %#s: %s%n", event.getAuthor(), event.getMessage().getContentDisplay());
         }
-
-        //event.getChannel().sendMessage("lol").queue();
+        
     }
 
     public void sendMessage(final String text) {
