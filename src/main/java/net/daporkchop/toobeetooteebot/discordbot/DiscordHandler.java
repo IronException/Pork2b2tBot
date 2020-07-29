@@ -31,7 +31,7 @@ public class DiscordHandler extends ListenerAdapter {
         // TODO turn off if channelId is wrong
     }
 
-    public boolean isRunning() {
+    public boolean isRunning() { // TODO is this actually needed... if yes then use it in checks!!!
         return jda != null;
     }
 

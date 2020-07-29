@@ -24,6 +24,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import lombok.NonNull;
 import net.daporkchop.lib.minecraft.text.parser.MCFormatParser;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.discordbot.DiscordBot;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
@@ -41,7 +42,7 @@ public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPa
             session.disconnect("heck");
         }
         WEBSOCKET_SERVER.fireChat(packet.getMessage());
-        DISCORD_BOT.sendMinecraftMessage(packet.getMessage());
+        DISCORD_BOT.sendMessage(DISCORD_BOT.convertMinecraftMessage(packet.getMessage()), DiscordBot.MessageType.CHAT);
         return true;
     }
 

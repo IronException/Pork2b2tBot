@@ -184,8 +184,15 @@ public final class Config {
     public static final class DiscordBot {
         public String token = "tokenId";
         public long channelId = 0;
-
+        public SendMessage sendMessage = new SendMessage();
         public boolean enable = false;
+
+        public static final class SendMessage {
+            public boolean undefined = false;
+            public boolean chat = true;
+            public boolean disconnect = true;
+            public boolean tab = true;
+        }
 
     }
 

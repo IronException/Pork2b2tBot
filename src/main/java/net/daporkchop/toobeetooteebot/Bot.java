@@ -40,6 +40,7 @@ import com.github.steveice10.packetlib.SessionFactory;
 import lombok.Getter;
 import lombok.Setter;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.discordbot.DiscordBot;
 import net.daporkchop.toobeetooteebot.gui.Gui;
 import net.daporkchop.toobeetooteebot.mc.PorkSessionFactory;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
@@ -223,6 +224,7 @@ public class Bot {
                 saveConfig();
                 //wait for client to disconnect before starting again
                 CLIENT_LOG.info("Disconnected. Reason: %s", ((PorkClientSession) this.client.getSession()).getDisconnectReason());
+                DISCORD_BOT.sendMessage(String.format("Disconnected. Reason: %s", DISCORD_BOT.convertMinecraftMessage(((PorkClientSession) this.client.getSession()).getDisconnectReason())), DiscordBot.MessageType.DISCONNECT);
             } while (SHOULD_RECONNECT && CACHE.reset(true) && this.delayBeforeReconnect());
         } catch (Exception e) {
             DEFAULT_LOG.alert(e);
