@@ -2,10 +2,15 @@ package net.daporkchop.toobeetooteebot.discordbot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.RichPresence;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.internal.entities.EntityBuilder;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -55,7 +60,11 @@ public class DiscordHandler extends ListenerAdapter {
     public void sendMessage(final String text) {
         // TODO store the messages somehow and sent them together if necessary
         Objects.requireNonNull(jda.getTextChannelById(channelId)).sendMessage(text).queue();
+    }
 
+    public void setActivity(final String text) {
+        // TODO wait and not spam
+        jda.getPresence().setActivity(Activity.streaming(text, "https://2b2t.io/"));
     }
 
     public interface MessageListener {

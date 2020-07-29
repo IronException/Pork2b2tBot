@@ -27,6 +27,8 @@ public class DiscordBot {
             } else if(message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
                 Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
             }
+            // TODO commands to send certain packets?
+            // TODO commands to change config?
         });
         if(isOnline()) { // TODO I dont think that check will work actually :thinking:
             DISCORD_LOG.success("Discord bot started!");
@@ -45,12 +47,19 @@ public class DiscordBot {
 
 
     public String convertMinecraftMessage(final String text) { // TODO move this method somewhere else!
-        return MCFormatParser.DEFAULT.parse(text).toRawString();
+        return MCFormatParser.DEFAULT.parse(text).toRawString().replaceAll("§.", ""); // TODO remove complete color codes
     }
 
-    public void sendMessage(final String message, final MessageType type) { // TODO maybe use an enum as like an event type to figure out whether to send or not
+    public void sendMessage(final String message, final MessageType type) {
         if (isOnline() && type.doesUserWantMessage()) {
             discordHandler.sendMessage(message);
+        }
+    }
+
+    public void updateActivity() {
+        if (isOnline()) {
+            discordHandler.setActivity("// TODO activity setting");
+            // TODO a setting what to show here? I want to be able to see queue pos + time there but at the same time allow the user to show other data...
         }
     }
 
