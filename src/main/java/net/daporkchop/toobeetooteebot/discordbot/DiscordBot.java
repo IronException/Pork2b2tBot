@@ -15,7 +15,7 @@ public class DiscordBot {
 
     public void connect() {
         discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId);
-        if(discordHandler.isRunning()) {
+        if(discordHandler.isRunning()) { // TODO I dont think that check will work actually :thinking:
             DISCORD_LOG.success("Discord bot started!");
         } else {
             DISCORD_LOG.alert("Discord bot starting failed!");
@@ -26,8 +26,10 @@ public class DiscordBot {
 
     }
 
-    public void onMessage(final String message) {
-
+    public void onMessage(final String message) { // TODO maybe use an enum as like an event type to figure out whether to send or not
+        if (CONFIG.discordBot.enable) {
+            discordHandler.sendMessage(message);
+        }
     }
 
 }
