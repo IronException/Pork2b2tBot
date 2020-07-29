@@ -41,7 +41,7 @@ public class ChatHandler implements HandlerRegistry.IncomingHandler<ServerChatPa
             session.disconnect("heck");
         }
         WEBSOCKET_SERVER.fireChat(packet.getMessage());
-        DISCORD_BOT.sendMessage(packet.getMessage());
+        DISCORD_BOT.sendMinecraftMessage(packet.getMessage());
         return true;
     }
 

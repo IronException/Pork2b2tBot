@@ -1,5 +1,6 @@
 package net.daporkchop.toobeetooteebot.discordbot;
 
+import net.daporkchop.lib.minecraft.text.parser.MCFormatParser;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
@@ -19,8 +20,8 @@ public class DiscordBot {
         discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId, message -> {
             if(message.equals("tab")) {
                 final TabList tabList = CACHE.getTabListCache().getTabList();
-                sendMessage(tabList.getHeader());
-                sendMessage(tabList.getFooter());
+                sendMinecraftMessage(tabList.getHeader());
+                sendMinecraftMessage(tabList.getFooter());
             }
         });
         if(discordHandler.isRunning()) { // TODO I dont think that check will work actually :thinking:
@@ -32,6 +33,11 @@ public class DiscordBot {
 
     public void disconnect() {
 
+    }
+
+
+    public void sendMinecraftMessage(final String text) {
+        sendMessage(MCFormatParser.DEFAULT.parse(text).toRawString());
     }
 
     public void sendMessage(final String message) { // TODO maybe use an enum as like an event type to figure out whether to send or not
