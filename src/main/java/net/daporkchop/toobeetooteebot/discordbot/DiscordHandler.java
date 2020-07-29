@@ -15,16 +15,19 @@ public class DiscordHandler extends ListenerAdapter {
 
     private JDA jda;
     private long channelId;
+
+    private MessageListener messageListener;
     // TODO a custom string as the status
     // TODO a setting what events to send... like chat...
     // TODO also send when online?
 
-    public void build(final String token, final long channelId) {
+    public void build(final String token, final long channelId, final MessageListener listener) {
         try {
             jda = JDABuilder.createDefault(token).addEventListeners(this).build();
         } catch (Exception ignored) {}
 
         this.channelId = channelId;
+        this.messageListener = listener;
         // TODO turn off if channelId is wrong
     }
 
@@ -43,11 +46,21 @@ public class DiscordHandler extends ListenerAdapter {
             System.out.printf("[PM] %#s: %s%n", event.getAuthor(), event.getMessage().getContentDisplay());
         }
 
+        if(event.getChannel().getIdLong() == channelId) {
+            messageListener.onMessage(event.getMessage().getContentDisplay());
+        }
+
     }
 
     public void sendMessage(final String text) {
         // TODO store the messages somehow and sent them together if necessary
         Objects.requireNonNull(jda.getTextChannelById(channelId)).sendMessage(text).queue();
+
+    }
+
+    public interface MessageListener {
+
+        void onMessage(final String message);
 
     }
 
