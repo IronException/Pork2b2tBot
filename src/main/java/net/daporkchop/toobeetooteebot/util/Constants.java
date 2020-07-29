@@ -222,7 +222,7 @@ public class Constants {
         DISCORD_BOT = new DiscordBot();
     }
 
-    public volatile boolean SHOULD_RECONNECT;
+    public volatile boolean SHOULD_RECONNECT; // TODO this should not be set to false maybe...
 
     public synchronized void loadConfig() {
         DEFAULT_LOG.info("Loading config...");

@@ -1,6 +1,7 @@
 package net.daporkchop.toobeetooteebot.discordbot;
 
 import net.daporkchop.lib.minecraft.text.parser.MCFormatParser;
+import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
@@ -20,8 +21,10 @@ public class DiscordBot {
         discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId, message -> {
             if(message.equals("tab")) {
                 final TabList tabList = CACHE.getTabListCache().getTabList();
-                sendMinecraftMessage(tabList.getHeader());
-                sendMinecraftMessage(tabList.getFooter());
+                sendMinecraftMessage("```\n " + tabList.getHeader() + " ```");
+                sendMinecraftMessage("```\n " + tabList.getFooter() + " ```");
+            } else if(message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
+                Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect", false);
             }
         });
         if(discordHandler.isRunning()) { // TODO I dont think that check will work actually :thinking:
