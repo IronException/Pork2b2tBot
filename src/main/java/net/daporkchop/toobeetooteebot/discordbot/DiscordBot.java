@@ -2,7 +2,6 @@ package net.daporkchop.toobeetooteebot.discordbot;
 
 import net.daporkchop.lib.minecraft.text.parser.MCFormatParser;
 import net.daporkchop.toobeetooteebot.Bot;
-import net.daporkchop.toobeetooteebot.util.Config;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
@@ -20,17 +19,17 @@ public class DiscordBot {
 
     public void connect() {
         discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId, message -> {
-            if(message.equals("tab")) {
+            if (message.equals("tab")) {
                 final TabList tabList = CACHE.getTabListCache().getTabList();
                 sendMessage("```\n " + convertMinecraftMessage(tabList.getHeader()) + " ```", MessageType.FORCED);
                 sendMessage("```\n " + convertMinecraftMessage(tabList.getFooter()) + " ```", MessageType.FORCED); // TODO maybe proxy methods for this?
-            } else if(message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
+            } else if (message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
                 Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
             }
             // TODO commands to send certain packets?
             // TODO commands to change config?
         });
-        if(isOnline()) { // TODO I dont think that check will work actually :thinking:
+        if (isOnline()) { // TODO I dont think that check will work actually :thinking:
             DISCORD_LOG.success("Discord bot started!");
         } else {
             DISCORD_LOG.alert("Discord bot starting failed!");
@@ -65,6 +64,7 @@ public class DiscordBot {
 
     public enum MessageType {
         UNDEFINED { // in case it is needed
+
             @Override
             public boolean doesUserWantMessage() {
                 return CONFIG.discordBot.sendMessage.undefined;
