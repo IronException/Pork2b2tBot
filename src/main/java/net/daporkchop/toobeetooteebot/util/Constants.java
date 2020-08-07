@@ -74,6 +74,7 @@ import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnMobHand
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnObjectHandler;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPaintingPacket;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.SpawnPlayerHandler;
+import net.daporkchop.toobeetooteebot.discordbot.DiscordBot;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.ServerChatHandler;
@@ -113,12 +114,14 @@ public class Constants {
     public final Logger        MODULE_LOG    = DEFAULT_LOG.channel("Module");
     public final Logger        SERVER_LOG    = DEFAULT_LOG.channel("Server");
     public final Logger        WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
+    public final Logger        DISCORD_LOG   = DEFAULT_LOG.channel("Discord");
 
     public final File CONFIG_FILE = new File("config.json");
 
     public       Config          CONFIG;
     public final DataCache       CACHE;
     public final WebSocketServer WEBSOCKET_SERVER;
+    public final DiscordBot      DISCORD_BOT;
 
     public final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
@@ -216,9 +219,10 @@ public class Constants {
 
         CACHE = new DataCache();
         WEBSOCKET_SERVER = new WebSocketServer();
+        DISCORD_BOT = new DiscordBot();
     }
 
-    public volatile boolean SHOULD_RECONNECT;
+    public volatile boolean SHOULD_RECONNECT; // TODO this should not be set to false maybe...
 
     public synchronized void loadConfig() {
         DEFAULT_LOG.info("Loading config...");
