@@ -12,6 +12,7 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 public class DiscordBot {
 
     private final DiscordHandler discordHandler;
+    private Thread tabUpdater;
 
     public DiscordBot() {
         discordHandler = new DiscordHandler();
@@ -28,6 +29,8 @@ public class DiscordBot {
             }
             // TODO commands to send certain packets?
             // TODO commands to change config?
+
+            tabUpdater = new Thread(tabUpdater);
         });
         if (isOnline()) { // TODO I dont think that check will work actually :thinking:
             DISCORD_LOG.success("Discord bot started!");
@@ -91,7 +94,7 @@ public class DiscordBot {
         TAB {
             @Override
             public boolean doesUserWantMessage() {
-                return CONFIG.discordBot.sendMessage.tab;
+                return CONFIG.discordBot.sendMessage.tab.send;
             }
         };
 
