@@ -194,7 +194,12 @@ public final class Config {
             public boolean undefined = false;
             public boolean chat = true;
             public boolean disconnect = true;
-            public boolean tab = true;
+            public Tab tab = new Tab();
+
+            public static final class Tab {
+                public boolean send = true;
+                public long deley = 10000;
+            }
         }
 
     }
