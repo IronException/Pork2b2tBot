@@ -350,7 +350,7 @@ public class Bot {
     protected boolean delayBeforeReconnect() {
         try {
             final int countdown;
-            if (((PorkClientSession) client.getSession()).isServerProbablyOff()) {
+            if (((PorkClientSession) client.getSession()).isServerProbablyOffline()) {
                 countdown = CONFIG.client.extra.autoReconnect.delaySecondsOffline;
 
                 this.reconnectCounter = 0;
