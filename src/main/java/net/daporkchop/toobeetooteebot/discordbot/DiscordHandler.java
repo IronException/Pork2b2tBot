@@ -4,19 +4,15 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.RichPresence;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.internal.entities.EntityBuilder;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
  * class that handles what needs to get sent to discord and the messages received from discord.
  */
-public class DiscordHandler extends ListenerAdapter {
+public class DiscordHandler //extends ListenerAdapter
+ {
 
     private JDA jda;
     private long channelId;
@@ -41,7 +37,7 @@ public class DiscordHandler extends ListenerAdapter {
     }
 
 
-    @Override
+    //@Override
     public void onMessageReceived(final MessageReceivedEvent event) {
 
         if (event.isFromType(ChannelType.TEXT)) {
