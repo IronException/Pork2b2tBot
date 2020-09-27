@@ -71,6 +71,8 @@ dependencies {
 
     shade "org.java-websocket:Java-WebSocket:$javawebsocketVersion"
 
+    shade 'net.dv8tion:JDA:4.1.1_165'
+
     testCompile "junit:junit:$junitVersion"
 
     compileOnly "org.projectlombok:lombok:$lombokVersion"
@@ -78,7 +80,6 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
-    compile 'net.dv8tion:JDA:4.1.1_165'
 }
 
 task sourceJar(type: Jar) {
@@ -88,7 +89,7 @@ task sourceJar(type: Jar) {
 jar {
     from {
         configurations.shade.collect {
-            it.isDirectory() ? it : zipTree(it)
+            (it.isDirectory() || it.getName().endsWith(".pom")) ? it : zipTree(it)
         }.unique()
     } {
         exclude "META-INF/**"
