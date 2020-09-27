@@ -195,7 +195,7 @@ public final class Config {
 
             public static final class Tab {
                 public boolean send = true;
-                public long deley = 10000;
+                public long delay = 10000;
             }
         }
 
