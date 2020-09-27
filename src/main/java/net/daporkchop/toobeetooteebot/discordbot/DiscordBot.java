@@ -22,8 +22,8 @@ public class DiscordBot {
         discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId, message -> {
             if (message.equals("tab")) {
                 final TabList tabList = CACHE.getTabListCache().getTabList();
-                sendMessage("```\n " + convertMinecraftMessage(tabList.getHeader()) + " ```", MessageType.FORCED);
-                sendMessage("```\n " + convertMinecraftMessage(tabList.getFooter()) + " ```", MessageType.FORCED); // TODO maybe proxy methods for this?
+                sendMessageForced("```\n " + convertMinecraftMessage(tabList.getHeader()) + " ```");
+                sendMessageForced("```\n " + convertMinecraftMessage(tabList.getFooter()) + " ```"); // TODO maybe proxy methods for this?
             } else if (message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
                 Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
             }
@@ -39,23 +39,10 @@ public class DiscordBot {
         }
     }
 
-    public void disconnect() {
-
-    }
+    public void disconnect() { }
 
     public boolean isOnline() {
         return CONFIG.discordBot.enable && discordHandler.isRunning();
-    }
-
-
-    public String convertMinecraftMessage(final String text) { // TODO move this method somewhere else!
-        return MCFormatParser.DEFAULT.parse(text).toRawString().replaceAll("§.", ""); // TODO remove complete color codes
-    }
-
-    public void sendMessage(final String message, final MessageType type) {
-        if (isOnline() && type.doesUserWantMessage()) {
-            discordHandler.sendMessage(message);
-        }
     }
 
     public void updateActivity() {
@@ -65,62 +52,27 @@ public class DiscordBot {
         }
     }
 
-    /**
-     * this enum allows to specify what type of message is sent.
-     *
-     */
-    public enum MessageType {
-        UNDEFINED { // in case it is needed
-
-            @Override
-            public boolean doesUserWantMessage() {
-                return CONFIG.discordBot.sendMessage.undefined;
-            }
-        },
-        FORCED {
-            @Override
-            public boolean doesUserWantMessage() {
-                return true;
-            }
-        },
-        CHAT {
-            @Override
-            public boolean doesUserWantMessage() {
-                return CONFIG.discordBot.sendMessage.chat;
-            }
-        },
-        DISCONNECT {
-            @Override
-            public boolean doesUserWantMessage() {
-                return CONFIG.discordBot.sendMessage.disconnect;
-            }
-        },
-        TAB {
-
-            private long lastTime;
-
-            @Override
-            public boolean doesUserWantMessage() {
-                if(!CONFIG.discordBot.sendMessage.tab.send) {
-                    return false;
-                }
-                // TODO send when the time is over in case there are no checks after that
-                // TODO would also be cool to consider when tab gets sent because user command
-
-                final long currentTime = System.currentTimeMillis();
-
-                DISCORD_LOG.info(currentTime + " < " + lastTime + " ");
-                if(currentTime - lastTime > CONFIG.discordBot.sendMessage.tab.delay) {
-
-                    lastTime = currentTime;
-                    return true;
-                }
-
-                return false;
-            }
-        };
-
-        public abstract boolean doesUserWantMessage();
+    public void sendTabMessage(final String header, final String footer) {
+        sendMessageForced("```\n " + convertMinecraftMessage(header) + " ```");
+        sendMessageForced("```\n " + convertMinecraftMessage(footer) + " ```");
     }
 
+    public void sendChatMessage(final String message) {
+        sendMessageForced(convertMinecraftMessage(message));
+    }
+
+    public void sendDisconnectMessage(final String reason) {
+        sendMessageForced(String.format("Disconnected. Reason: %s", convertMinecraftMessage(reason)));
+    }
+
+    public void sendMessageForced(final String message) {
+        if (isOnline()) {
+            discordHandler.sendMessage(message);
+        }
+    }
+
+    private String convertMinecraftMessage(final String text) { // TODO move this method somewhere else!
+        return MCFormatParser.DEFAULT.parse(text).toRawString().replaceAll("§.", ""); // TODO remove complete color codes
+    }
+    
 }
