@@ -12,7 +12,8 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 public class DiscordBot {
 
     private final DiscordHandler discordHandler;
-    private Thread tabUpdater;
+
+    private long lastTimeSentTab;
 
     public DiscordBot() {
         discordHandler = new DiscordHandler();
@@ -22,15 +23,13 @@ public class DiscordBot {
         discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId, message -> {
             if (message.equals("tab")) {
                 final TabList tabList = CACHE.getTabListCache().getTabList();
-                sendMessageForced("```\n " + convertMinecraftMessage(tabList.getHeader()) + " ```");
-                sendMessageForced("```\n " + convertMinecraftMessage(tabList.getFooter()) + " ```"); // TODO maybe proxy methods for this?
+                sendTabMessageForced(tabList.getHeader(), tabList.getFooter());
             } else if (message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
                 Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
             }
             // TODO commands to send certain packets?
             // TODO commands to change config?
 
-            tabUpdater = new Thread(tabUpdater);
         });
         if (isOnline()) { // TODO I dont think that check will work actually :thinking:
             DISCORD_LOG.success("Discord bot started!");
@@ -53,16 +52,33 @@ public class DiscordBot {
     }
 
     public void sendTabMessage(final String header, final String footer) {
+        if(CONFIG.discordBot.sendMessage.tab.send) {
+            // TODO send when the time is over in case there are no checks after that
+
+            final long currentTime = System.currentTimeMillis();
+            if(currentTime - lastTimeSentTab > CONFIG.discordBot.sendMessage.tab.delay) {
+                lastTimeSentTab = currentTime;
+
+                sendTabMessageForced(header, footer);
+            }
+        }
+    }
+
+    private void sendTabMessageForced(final String header, final String footer) {
         sendMessageForced("```\n " + convertMinecraftMessage(header) + " ```");
         sendMessageForced("```\n " + convertMinecraftMessage(footer) + " ```");
     }
 
     public void sendChatMessage(final String message) {
-        sendMessageForced(convertMinecraftMessage(message));
+        if(CONFIG.discordBot.sendMessage.chat) {
+            sendMessageForced(convertMinecraftMessage(message));
+        }
     }
 
     public void sendDisconnectMessage(final String reason) {
-        sendMessageForced(String.format("Disconnected. Reason: %s", convertMinecraftMessage(reason)));
+        if(CONFIG.discordBot.sendMessage.disconnect) {
+            sendMessageForced(String.format("Disconnected. Reason: %s", convertMinecraftMessage(reason)));
+        }
     }
 
     public void sendMessageForced(final String message) {
@@ -74,5 +90,5 @@ public class DiscordBot {
     private String convertMinecraftMessage(final String text) { // TODO move this method somewhere else!
         return MCFormatParser.DEFAULT.parse(text).toRawString().replaceAll("§.", ""); // TODO remove complete color codes
     }
-    
+
 }
