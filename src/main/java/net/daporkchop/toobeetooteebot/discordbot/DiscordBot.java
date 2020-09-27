@@ -65,6 +65,10 @@ public class DiscordBot {
         }
     }
 
+    /**
+     * this enum allows to specify what type of message is sent.
+     *
+     */
     public enum MessageType {
         UNDEFINED { // in case it is needed
 
@@ -92,9 +96,27 @@ public class DiscordBot {
             }
         },
         TAB {
+
+            private long lastTime;
+
             @Override
             public boolean doesUserWantMessage() {
-                return CONFIG.discordBot.sendMessage.tab.send;
+                if(!CONFIG.discordBot.sendMessage.tab.send) {
+                    return false;
+                }
+                // TODO send when the time is over in case there are no checks after that
+                // TODO would also be cool to consider when tab gets sent because user command
+
+                final long currentTime = System.currentTimeMillis();
+
+                DISCORD_LOG.info(currentTime + " < " + lastTime + " ");
+                if(currentTime - lastTime > CONFIG.discordBot.sendMessage.tab.delay) {
+
+                    lastTime = currentTime;
+                    return true;
+                }
+
+                return false;
             }
         };
 
