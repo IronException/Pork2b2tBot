@@ -6,8 +6,11 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.internal.utils.Helpers;
 
 import java.util.Objects;
+
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
 /**
  * class that handles what needs to get sent to discord and the messages received from discord.
@@ -55,6 +58,10 @@ public class DiscordHandler extends ListenerAdapter {
 
     public void sendMessage(final String text) {
         // TODO store the messages somehow and sent them together if necessary
+        if(Helpers.isBlank(text)) {
+            DISCORD_LOG.alert("Can't send an empty message!");
+            return;
+        }
         Objects.requireNonNull(jda.getTextChannelById(channelId)).sendMessage(text).queue();
     }
 
