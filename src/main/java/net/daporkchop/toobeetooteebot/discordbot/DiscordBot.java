@@ -33,6 +33,7 @@ public class DiscordBot {
         });
         if (isOnline()) { // TODO I dont think that check will work actually :thinking:
             DISCORD_LOG.success("Discord bot started!");
+            setupActivityThread();
         } else {
             DISCORD_LOG.alert("Discord bot starting failed!");
         }
@@ -40,20 +41,47 @@ public class DiscordBot {
 
     public void disconnect() { }
 
+    public void setupActivityThread() {
+        if(!CONFIG.discordBot.activity.enabled) {
+            return;
+        }
+
+        if(CONFIG.discordBot.activity.updateDelay > 0) {
+            // TODO this is probably bad practice but Idk a better way :/
+            new Thread(() -> {
+                while (isOnline()) {
+                    updateActivity();
+
+                    try {
+                        Thread.sleep(CONFIG.discordBot.activity.updateDelay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } else {
+            // only call it once otherwise
+            updateActivity();
+        }
+    }
+
+
+    private void updateActivity() {
+        // TODO maybe get the actual data somehow
+        discordHandler.setActivity(CONFIG.discordBot.activity.text
+                .replace("{playerName}", CONFIG.authentication.username) // Bot.getInstance().getProtocol().getProfile().getName() ?s
+                .replace("{serverIp}", CONFIG.client.server.address));
+        // TODO more names
+
+    }
+
     public boolean isOnline() {
         return CONFIG.discordBot.enable && discordHandler.isRunning();
     }
 
-    public void updateActivity() {
-        if (isOnline()) {
-            discordHandler.setActivity("// TODO activity setting");
-            // TODO a setting what to show here? I want to be able to see queue pos + time there but at the same time allow the user to show other data...
-        }
-    }
-
     public void sendTabMessage(final String header, final String footer) {
         if(CONFIG.discordBot.sendMessage.tab.send) {
-            // TODO send when the time is over in case there are no checks after that
+            // TODO check when the time is over in case there are no checks after that you still get the latest tab update
 
             final long currentTime = System.currentTimeMillis();
             if(currentTime - lastTimeSentTab > CONFIG.discordBot.sendMessage.tab.delay) {

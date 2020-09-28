@@ -185,6 +185,7 @@ public final class Config {
         public String token = "tokenId";
         public long channelId = 0;
         public SendMessage sendMessage = new SendMessage();
+        public Activity activity = new Activity();
         public boolean enable = false;
 
         public static final class SendMessage {
@@ -195,8 +196,14 @@ public final class Config {
 
             public static final class Tab {
                 public boolean send = true;
-                public long delay = 10000;
+                public long delay = 12 * 60 * 1000;
             }
+        }
+
+        public static final class Activity {
+            public String text = "{playerName} on {serverIp}"; // TODO is there some way to list all the possible shortcuts?
+            public long updateDelay = 12 * 60 * 1000;
+            public boolean enabled = true;
         }
 
     }
