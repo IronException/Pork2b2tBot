@@ -47,6 +47,7 @@ public final class Config {
         public Server server = new Server();
 
         public static final class Extra {
+            public boolean sendTeleportConfirmPacketWhenClientNotConnected = false;
             public AntiAFK antiafk = new AntiAFK();
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();

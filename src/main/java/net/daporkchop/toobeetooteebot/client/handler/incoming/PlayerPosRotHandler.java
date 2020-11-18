@@ -21,13 +21,15 @@
 package net.daporkchop.toobeetooteebot.client.handler.incoming;
 
 import com.github.steveice10.mc.protocol.data.game.entity.player.PositionElement;
+import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientTeleportConfirmPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.cache.data.PlayerCache;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
+import static net.daporkchop.toobeetooteebot.util.Constants.CACHE;
+import static net.daporkchop.toobeetooteebot.util.Constants.CONFIG;
 
 /**
  * @author DaPorkchop_
@@ -42,6 +44,10 @@ public class PlayerPosRotHandler implements HandlerRegistry.IncomingHandler<Serv
                 .setZ((packet.getRelativeElements().contains(PositionElement.Z) ? cache.getZ() : 0.0d) + packet.getZ())
                 .setYaw((packet.getRelativeElements().contains(PositionElement.YAW) ? cache.getYaw() : 0.0f) + packet.getYaw())
                 .setPitch((packet.getRelativeElements().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
+
+        if(CONFIG.client.extra.sendTeleportConfirmPacketWhenClientNotConnected) {
+            session.send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
+        }
         return true;
     }
 
