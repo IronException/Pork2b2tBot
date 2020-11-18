@@ -48,14 +48,23 @@ public final class Config {
 
         public static final class Extra {
             public boolean sendTeleportConfirmPacketWhenClientNotConnected = false;
+
+            public CustomRotations customRotations = new CustomRotations();
             public AntiAFK antiafk = new AntiAFK();
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
 
+            public static final class CustomRotations {
+                public boolean enabled = true;
+                public boolean lookedAtClosestEntity = true;
+
+                public boolean runEvenIfClientsConnected = false;
+            }
+
             public static final class AntiAFK {
                 public Actions actions = new Actions();
-                public boolean enabled = true;
+                public boolean enabled = false;
                 public boolean runEvenIfClientsConnected = false;
 
                 public static final class Actions {

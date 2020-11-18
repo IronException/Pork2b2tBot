@@ -7,6 +7,7 @@ import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityPlayer;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.CACHE;
+import static net.daporkchop.toobeetooteebot.util.Constants.CONFIG;
 
 public class RotationHandler {
 
@@ -16,22 +17,25 @@ private final static RotationHandler INSTANCE = new RotationHandler();
         INSTANCE.lookAtClosestEntity();
     }
 
-    public static void tryLook() {
-        INSTANCE.lookAtClosestEntity();
-    }
-
     public void lookAtClosestEntity() {
+        if(!CONFIG.client.extra.customRotations.enabled) {
+            return;
+        }
+        if(!CONFIG.client.extra.customRotations.runEvenIfClientsConnected && Bot.getInstance().getCurrentPlayer() != null) {
+            return;
+        }
+
         final EntityPlayer player = CACHE.getPlayerCache().getThePlayer();
 
-
-        CACHE.getEntityCache()
-                .getCachedEntities()
-                .values()
-                .stream()
-                .filter(entity -> entity != player)
-                .min((a, b) -> (int) (distance(a, player) - distance(b, player)))
-                .ifPresent(entity -> lookAt(player, entity.getX(), entity.getY(), entity.getZ()));
-
+        if(CONFIG.client.extra.customRotations.lookedAtClosestEntity) {
+            CACHE.getEntityCache()
+                    .getCachedEntities()
+                    .values()
+                    .stream()
+                    .filter(entity -> entity != player)
+                    .min((a, b) -> (int) (distance(a, player) - distance(b, player)))
+                    .ifPresent(entity -> lookAt(player, entity.getX(), entity.getY(), entity.getZ()));
+        }
 
     }
 
