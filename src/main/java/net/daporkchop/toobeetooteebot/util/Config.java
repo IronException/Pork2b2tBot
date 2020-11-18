@@ -57,7 +57,7 @@ public final class Config {
 
             public static final class CustomRotations {
                 public boolean enabled = true;
-                public boolean lookedAtClosestEntity = true;
+                public boolean lookAtClosestEntity = true;
 
                 public boolean runEvenIfClientsConnected = false;
             }

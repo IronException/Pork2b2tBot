@@ -37,6 +37,7 @@ import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.*;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.entity.*;
 import net.daporkchop.toobeetooteebot.client.handler.incoming.spawn.*;
+import net.daporkchop.toobeetooteebot.mc.BotHandler;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.LoginStartHandler;
 import net.daporkchop.toobeetooteebot.server.handler.incoming.ServerChatHandler;
@@ -76,6 +77,8 @@ public class Constants {
     public final Logger        MODULE_LOG    = DEFAULT_LOG.channel("Module");
     public final Logger        SERVER_LOG    = DEFAULT_LOG.channel("Server");
     public final Logger        WEBSOCKET_LOG = DEFAULT_LOG.channel("WebSocket");
+
+    public final BotHandler BOT_HANDLER = new BotHandler();
 
     public final File CONFIG_FILE = new File("config.json");
 
