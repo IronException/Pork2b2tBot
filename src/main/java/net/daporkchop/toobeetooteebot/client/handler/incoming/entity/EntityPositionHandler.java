@@ -23,10 +23,12 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming.entity;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPositionPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
+import net.daporkchop.toobeetooteebot.mc.RotationHandler;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
+import static net.daporkchop.toobeetooteebot.util.Constants.CACHE;
+import static net.daporkchop.toobeetooteebot.util.Constants.CLIENT_LOG;
 
 /**
  * @author DaPorkchop_
@@ -39,6 +41,8 @@ public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<Se
             entity.setX(entity.getX() + packet.getMovementX())
                     .setY(entity.getY() + packet.getMovementY())
                     .setZ(entity.getZ() + packet.getMovementZ());
+
+            RotationHandler.update();
         } else {
             CLIENT_LOG.warn("Received ServerEntityPositionPacket for invalid entity (id=%d)", packet.getEntityId());
         }

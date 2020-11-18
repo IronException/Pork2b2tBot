@@ -21,6 +21,7 @@
 package net.daporkchop.toobeetooteebot.util.cache.data.entity;
 
 import com.github.steveice10.packetlib.packet.Packet;
+import lombok.Getter;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
 
@@ -34,6 +35,7 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
  * @author DaPorkchop_
  */
 public class EntityCache implements CachedData {
+    @Getter
     protected final Map<Integer, Entity> cachedEntities = new ConcurrentHashMap<>(); //TODO: finish porklib primitive
 
     @Override
