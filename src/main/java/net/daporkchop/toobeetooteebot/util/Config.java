@@ -58,9 +58,11 @@ public final class Config {
                 public boolean enabled = false;
                 public long sleepBetweenTicks = 1000 / 20;
 
-                public boolean runEventIfClientsConnected = false;
+                public boolean runEvenIfClientsConnected = false;
 
-                // TODO what it should do... look at closest entity is default...
+                public boolean lookAtClosestPlayer = true;
+                // TODO a setting to not look at players at all
+                public boolean lookAtClosestEntityAtAll = true;
 
             }
 

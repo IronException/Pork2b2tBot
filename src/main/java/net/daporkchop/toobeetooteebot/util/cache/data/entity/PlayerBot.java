@@ -30,8 +30,15 @@ public class PlayerBot extends EntityPlayer {
     }
 
     public void lookAtClosestEntity() { // TODO settings whether to prefer players or entities
-        Optional<Entity> closest = UTIL.getClosestPlayer().map(player -> player);
-        if(!closest.isPresent()) {
+        if(!CONFIG.client.extra.customPlayer.lookAtClosestEntityAtAll) {
+            return;
+        }
+
+        Optional<Entity> closest = Optional.empty();
+        if(CONFIG.client.extra.customPlayer.lookAtClosestPlayer) {
+            closest = UTIL.getClosestPlayer().map(player -> player);
+        }
+        if(!closest.isPresent()) { // in case it couldnt find a player it still looks at an entity
             closest = UTIL.getClosestEntity();
         }
         closest.ifPresent(this::lookAt);

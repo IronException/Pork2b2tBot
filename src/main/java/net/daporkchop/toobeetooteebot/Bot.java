@@ -130,7 +130,7 @@ public class Bot {
 
                                 Thread.sleep(CONFIG.client.extra.customPlayer.sleepBetweenTicks);
                                 if (this.isConnected() && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
-                                    if(CONFIG.client.extra.antiafk.runEvenIfClientsConnected || this.currentPlayer.get() == null) {
+                                    if(CONFIG.client.extra.customPlayer.runEvenIfClientsConnected || this.currentPlayer.get() == null) {
                                         CACHE.getPlayerCache().getThePlayer().tick();
                                     }
                                 }
