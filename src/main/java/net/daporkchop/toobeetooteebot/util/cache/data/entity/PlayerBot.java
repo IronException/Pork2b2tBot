@@ -4,7 +4,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlaye
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import net.daporkchop.lib.math.vector.d.Vec3d;
+import net.daporkchop.lib.math.vector.d.DoubleVector3;
 import net.daporkchop.toobeetooteebot.Bot;
 
 import java.util.Optional;
@@ -29,7 +29,7 @@ public class PlayerBot extends EntityPlayer {
         updateServerAndClients();
     }
 
-    public void lookAtClosestEntity() { // TODO settings whether to prefer players or entities
+    public void lookAtClosestEntity() {
         if(!CONFIG.client.extra.customPlayer.lookAtClosestEntityAtAll) {
             return;
         }
@@ -38,21 +38,19 @@ public class PlayerBot extends EntityPlayer {
         if(CONFIG.client.extra.customPlayer.lookAtClosestPlayer) {
             closest = UTIL.getClosestPlayer().map(player -> player);
         }
-        if(!closest.isPresent()) { // in case it couldnt find a player it still looks at an entity
+        if(!closest.isPresent()) { // in case it couldnt find a player or didnt even want one it still looks at an entity
             closest = UTIL.getClosestEntity();
         }
         closest.ifPresent(this::lookAt);
     }
 
     public void lookAt(final Entity entity) {
-        // TODO getEyeLevel and look at that x y z
-        lookAt(entity.getX(), entity.getY(), entity.getZ());
+        lookAt(entity.getEyePosition());
 
     }
 
-    public void lookAt(final double x, final double y, final double z) {
-        // TODO get eye level
-        final Vec3d vector = new Vec3d(getX() - x, getY() - y, getZ() - z);
+    public void lookAt(final DoubleVector3 position) {
+        final DoubleVector3 vector = getEyePosition().subtract(position.getX(), position.getY(), position.getZ());
         final float yaw = (float) UTIL.calculateYaw(vector);
         final float pitch = (float) UTIL.calculatePitch(vector);
         lookAt(yaw, pitch);

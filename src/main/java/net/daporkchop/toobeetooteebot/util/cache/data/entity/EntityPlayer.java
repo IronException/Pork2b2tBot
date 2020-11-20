@@ -24,12 +24,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadat
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.function.Consumer;
@@ -71,4 +66,24 @@ public class EntityPlayer extends EntityEquipment {
         }
         super.addPackets(consumer);
     }
+
+    /* // TODO figure out how to get the bounding box size and whether player is sneaking...
+    @Override
+    public double getEyeHeight() {
+        final double boundingBoxHeight = 2;
+        // this is minecraft code in EntityPlayer line 2471
+        double height = 1.62F;
+
+        if (this.isPlayerSleeping()) {
+            height = 0.2F;
+        } else if (!this.isSneaking() && boundingBoxHeight != 1.65F) {
+            if (this.isElytraFlying() || boundingBoxHeight == 0.6F) {
+                height = 0.4F;
+            }
+        } else {
+            height -= 0.08F;
+        }
+
+        return height;
+    }*/
 }

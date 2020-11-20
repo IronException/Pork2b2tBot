@@ -1,13 +1,13 @@
 package net.daporkchop.toobeetooteebot.mc;
 
-import net.daporkchop.lib.math.vector.d.Vec3d;
+import net.daporkchop.lib.math.vector.d.DoubleVector3;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.Entity;
 import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityPlayer;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
+import static net.daporkchop.toobeetooteebot.util.Constants.CACHE;
 
 public class Util {
 
@@ -34,11 +34,11 @@ public class Util {
     }
 
     // TODO make a util class?
-    public double calculateYaw(final Vec3d vector) {
+    public double calculateYaw(final DoubleVector3 vector) {
         return Math.toDegrees(Math.atan2(vector.getZ(), vector.getX()) + Math.PI / 2.0);
     }
 
-    public double calculatePitch(final Vec3d vector) {
+    public double calculatePitch(final DoubleVector3 vector) {
         final double mag = Math.sqrt(square(vector.getX()) + square(vector.getZ()));
         return Math.toDegrees(Math.atan2(vector.getY(), mag));
     }

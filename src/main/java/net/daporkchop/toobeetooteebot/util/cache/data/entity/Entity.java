@@ -29,6 +29,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.daporkchop.lib.math.vector.d.Vec3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,5 +75,16 @@ public abstract class Entity {
             arr[i] = this.passengerIds.get(i);
         }
         return arr;
+    }
+
+    public Vec3d getEyePosition() {
+        // TODO make a difference for mobs that dont look like steve...
+        final double width = 0.6; // we assume that all entities width and length is the same...
+        // TODO usually entities are 0.6 wide? (not a full block for sure I think)
+        return new Vec3d(x + width / 2.0, y + getEyeHeight(), z + width / 2.0);
+    }
+
+    public double getEyeHeight() {
+        return 2 * 0.85;
     }
 }
