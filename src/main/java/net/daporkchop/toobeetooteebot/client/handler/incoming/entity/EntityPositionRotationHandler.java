@@ -42,7 +42,6 @@ public class EntityPositionRotationHandler implements HandlerRegistry.IncomingHa
                     .setY(entity.getY() + packet.getMovementY())
                     .setZ(entity.getZ() + packet.getMovementZ());
 
-            BOT_HANDLER.checkToLookAtClosestEntity();
         } else {
             CLIENT_LOG.warn("Received ServerEntityPositionRotationPacket for invalid entity (id=%d)", packet.getEntityId());
         }

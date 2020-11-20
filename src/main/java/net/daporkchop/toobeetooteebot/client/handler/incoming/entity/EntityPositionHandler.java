@@ -40,7 +40,6 @@ public class EntityPositionHandler implements HandlerRegistry.IncomingHandler<Se
                     .setY(entity.getY() + packet.getMovementY())
                     .setZ(entity.getZ() + packet.getMovementZ());
 
-            BOT_HANDLER.checkToLookAtClosestEntity();
         } else {
             CLIENT_LOG.warn("Received ServerEntityPositionPacket for invalid entity (id=%d)", packet.getEntityId());
         }

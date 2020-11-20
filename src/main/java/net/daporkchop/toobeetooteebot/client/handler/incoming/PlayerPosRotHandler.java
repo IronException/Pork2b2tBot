@@ -28,8 +28,7 @@ import net.daporkchop.toobeetooteebot.client.PorkClientSession;
 import net.daporkchop.toobeetooteebot.util.cache.data.PlayerCache;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.CACHE;
-import static net.daporkchop.toobeetooteebot.util.Constants.CONFIG;
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
 /**
  * @author DaPorkchop_
@@ -45,7 +44,9 @@ public class PlayerPosRotHandler implements HandlerRegistry.IncomingHandler<Serv
                 .setYaw((packet.getRelativeElements().contains(PositionElement.YAW) ? cache.getYaw() : 0.0f) + packet.getYaw())
                 .setPitch((packet.getRelativeElements().contains(PositionElement.PITCH) ? cache.getPitch() : 0.0f) + packet.getPitch());
 
-        if(CONFIG.client.extra.sendTeleportConfirmPacketWhenClientNotConnected) {
+        if(CONFIG.client.extra.customPlayer.enabled) {
+            // we need to send this, otherwise the server doesnt let us do anything
+            // TODO I should prly get that packet somewhere else and accept there but I have no idea how...
             session.send(new ClientTeleportConfirmPacket(packet.getTeleportId()));
         }
         return true;

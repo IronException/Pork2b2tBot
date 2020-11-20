@@ -47,20 +47,23 @@ public final class Config {
         public Server server = new Server();
 
         public static final class Extra {
-            public boolean sendTeleportConfirmPacketWhenClientNotConnected = false;
 
-            public CustomRotations customRotations = new CustomRotations();
+            public CustomPlayer customPlayer = new CustomPlayer();
             public AntiAFK antiafk = new AntiAFK();
             public AutoReconnect autoReconnect = new AutoReconnect();
             public AutoRespawn autoRespawn = new AutoRespawn();
             public Spammer spammer = new Spammer();
 
-            public static final class CustomRotations {
-                public boolean enabled = true;
-                public boolean lookAtClosestEntity = true;
+            public static final class CustomPlayer {
+                public boolean enabled = false;
+                public long sleepBetweenTicks = 1000 / 20;
 
-                public boolean runEvenIfClientsConnected = false;
+                public boolean runEventIfClientsConnected = false;
+
+                // TODO what it should do... look at closest entity is default...
+
             }
+
 
             public static final class AntiAFK {
                 public Actions actions = new Actions();

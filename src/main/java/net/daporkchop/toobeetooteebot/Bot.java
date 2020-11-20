@@ -53,17 +53,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Proxy;
 import java.net.URL;
-import java.util.ArrayDeque;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
@@ -128,6 +121,27 @@ public class Bot {
                 }, "Pork2b2tBot command processor thread");
                 commandReaderThread.setDaemon(true);
                 commandReaderThread.start();
+            }
+            {
+                if(CONFIG.client.extra.customPlayer.enabled) {
+                    final Thread playerBotTickThread = new Thread(() -> {
+                        try {
+                            while (true) {
+
+                                Thread.sleep(CONFIG.client.extra.customPlayer.sleepBetweenTicks);
+                                if (this.isConnected() && ((MinecraftProtocol) this.client.getSession().getPacketProtocol()).getSubProtocol() == SubProtocol.GAME) {
+                                    if(CONFIG.client.extra.antiafk.runEvenIfClientsConnected || this.currentPlayer.get() == null) {
+                                        CACHE.getPlayerCache().getThePlayer().tick();
+                                    }
+                                }
+                            }
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }, "Pork2b2tBot player bot tick thread");
+                    playerBotTickThread.setDaemon(true); // TODO not sure what daemons do. Is setting this thread to daemon good?
+                    playerBotTickThread.start();
+                }
             }
             { //TODO: clean this up
                 Collection<Runnable> modules = new ArrayDeque<>();

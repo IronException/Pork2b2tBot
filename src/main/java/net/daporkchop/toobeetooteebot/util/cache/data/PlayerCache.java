@@ -32,7 +32,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.daporkchop.toobeetooteebot.util.cache.CachedData;
-import net.daporkchop.toobeetooteebot.util.cache.data.entity.EntityPlayer;
+import net.daporkchop.toobeetooteebot.util.cache.data.entity.PlayerBot;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
@@ -58,7 +58,7 @@ public class PlayerCache implements CachedData {
     @NonNull
     protected Difficulty difficulty;
     
-    protected EntityPlayer thePlayer;
+    protected PlayerBot thePlayer;
 
     protected final ItemStack[] inventory = new ItemStack[46];
 
@@ -71,7 +71,7 @@ public class PlayerCache implements CachedData {
     @Override
     public void reset(boolean full) {
         if (full)   {
-            this.thePlayer = (EntityPlayer) new EntityPlayer(true).setEntityId(-1);
+            this.thePlayer = (PlayerBot) new PlayerBot().setEntityId(-1);
             this.hardcore = this.reducedDebugInfo = false;
             this.maxPlayers = -1;
             Arrays.fill(this.inventory, null);
