@@ -53,6 +53,7 @@ public class PlayerHealthHandler implements HandlerRegistry.IncomingHandler<Serv
                 }
             }).start();
         }
+        DISCORD_BOT.updateStatus(packet.getHealth(), packet.getFood(), packet.getSaturation());
         return true;
     }
 

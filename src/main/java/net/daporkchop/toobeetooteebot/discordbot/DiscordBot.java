@@ -71,6 +71,7 @@ public class DiscordBot {
         discordHandler.setActivity(CONFIG.discordBot.activity.text
                 .replace("{playerName}", CONFIG.authentication.username) // Bot.getInstance().getProtocol().getProfile().getName() ?s
                 .replace("{serverIp}", CONFIG.client.server.address));
+        // TODO dont send again if nothing changed...
         // TODO more names
 
     }
@@ -107,6 +108,27 @@ public class DiscordBot {
         if(CONFIG.discordBot.sendMessage.disconnect) {
             sendMessageForced(String.format("Disconnected. Reason: %s", convertMinecraftMessage(reason)));
         }
+    }
+
+    private float lastHealth;
+    private int lastFood;
+    private float lastSaturation;
+
+    public void updateStatus(final float health, final int food, final float saturation) {
+        if(!CONFIG.discordBot.sendMessage.status) {
+            return;
+        }
+
+        if(lastHealth != health
+            || lastFood != food
+            || lastSaturation != saturation) {
+            sendMessageForced(String.format("health: %f, food: %d, saturation: %f", health, food, saturation));
+
+            lastHealth = health;
+            lastFood = food;
+            lastSaturation = saturation;
+        }
+
     }
 
     public void sendMessageForced(final String message) {

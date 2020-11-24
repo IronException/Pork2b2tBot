@@ -192,6 +192,7 @@ public final class Config {
             public boolean undefined = false;
             public boolean chat = true;
             public boolean disconnect = true;
+            public boolean status = true;
             public Tab tab = new Tab();
 
             public static final class Tab {
