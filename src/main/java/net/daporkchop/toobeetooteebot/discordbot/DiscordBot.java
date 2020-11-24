@@ -1,6 +1,6 @@
 package net.daporkchop.toobeetooteebot.discordbot;
 
-import net.daporkchop.lib.minecraft.text.parser.MCFormatParser;
+import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
 
@@ -116,7 +116,7 @@ public class DiscordBot {
     }
 
     private String convertMinecraftMessage(final String text) { // TODO move this method somewhere else!
-        return MCFormatParser.DEFAULT.parse(text).toRawString().replaceAll("§.", ""); // TODO remove complete color codes
+        return AutoMCFormatParser.DEFAULT.parse(text).toRawString().replaceAll("§.", ""); // TODO remove complete color codes
     }
 
 }
