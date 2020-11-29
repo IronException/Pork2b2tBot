@@ -188,12 +188,20 @@ public final class Config {
         public Activity activity = new Activity();
         public boolean enable = false;
 
+        public long sleepTime = 1000;
+
         public static final class SendMessage {
             public boolean undefined = false;
             public boolean chat = true;
-            public boolean disconnect = true;
-            public boolean status = true;
+            public boolean disconnect = true; // TODO 1 option to make it always send it or just when it has a new disconnection type
+            public Status status = new Status();
             public Tab tab = new Tab();
+
+            public static final class Status {
+                public boolean send = true;
+                public long delay = 0;
+
+            }
 
             public static final class Tab {
                 public boolean send = true;
@@ -203,7 +211,7 @@ public final class Config {
 
         public static final class Activity {
             public String text = "{playerName} on {serverIp}"; // TODO is there some way to list all the possible shortcuts?
-            public long updateDelay = 12 * 60 * 1000;
+            public long delay = 12 * 60 * 1000;
             public boolean enabled = true;
         }
 

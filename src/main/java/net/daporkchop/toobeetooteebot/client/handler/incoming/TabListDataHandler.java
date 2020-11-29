@@ -23,7 +23,6 @@ package net.daporkchop.toobeetooteebot.client.handler.incoming;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
 import lombok.NonNull;
 import net.daporkchop.toobeetooteebot.client.PorkClientSession;
-import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
 import static net.daporkchop.toobeetooteebot.util.Constants.*;
@@ -34,22 +33,13 @@ import static net.daporkchop.toobeetooteebot.util.Constants.*;
 public class TabListDataHandler implements HandlerRegistry.IncomingHandler<ServerPlayerListDataPacket, PorkClientSession> {
     @Override
     public boolean apply(@NonNull ServerPlayerListDataPacket packet, @NonNull PorkClientSession session) {
-        if (DISCORD_BOT.isOnline()
-                && doesChange(CACHE.getTabListCache().getTabList(), packet)) {
-            DISCORD_BOT.sendTabMessage(packet.getHeader(), packet.getFooter());
-            // TODO kinda duplicate from tab command. In general maybe the checks that are done here should be moved?
-
-        }
         CACHE.getTabListCache().getTabList()
                 .setHeader(packet.getHeader())
                 .setFooter(packet.getFooter());
         WEBSOCKET_SERVER.firePlayerListUpdate();
-        return true;
-    }
 
-    private boolean doesChange(final TabList tabList, final ServerPlayerListDataPacket packet) {
-        return !tabList.getHeader().equals(packet.getHeader())
-                || !tabList.getFooter().equals(packet.getFooter());
+        DISCORD_BOT.updateTab(packet.getHeader(), packet.getFooter());
+        return true;
     }
 
     @Override
