@@ -84,7 +84,8 @@ public class DiscordBot {
                 .replace("{serverIp}", CONFIG.client.server.address);
         // TODO more names
 
-        if(!lastActivity.equals(activity)) {
+        if(lastActivity == null
+            || !lastActivity.equals(activity)) {
             // TODO wait maybe if needed...
             discordHandler.setActivity(activity);
             lastActivity = activity;
@@ -131,7 +132,9 @@ public class DiscordBot {
             return;
         }
 
-        if(!lastHeader.equals(header)
+        if(lastHeader == null
+            || !lastHeader.equals(header)
+            || lastFooter == null
             || !lastFooter.equals(footer)) {
 
             sendTab = true;
