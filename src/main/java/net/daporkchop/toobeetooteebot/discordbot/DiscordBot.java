@@ -80,10 +80,15 @@ public class DiscordBot {
             return;
         }
         // TODO maybe get the actual data somehow
-        final String activity = CONFIG.discordBot.activity.text
+        final String text = CONFIG.discordBot.activity.text
                 .replace("{playerName}", CONFIG.authentication.username) // Bot.getInstance().getProtocol().getProfile().getName() ?s
                 .replace("{serverIp}", CONFIG.client.server.address);
         // TODO more names
+
+        final String activity = text
+                .replaceAll("<queue>.*</queue>",
+                        calculateQueueData(text.replaceAll(".*<queue>", "")
+                        .replaceAll("</queue>.*", "")));
 
         if(lastActivity == null
             || !lastActivity.equals(activity)) {
@@ -93,6 +98,23 @@ public class DiscordBot {
         }
 
 
+    }
+
+    private String calculateQueueData(final String desiredText) {
+        if (!"2b2t.org".equals(CONFIG.client.server.address)) {
+            return "";
+        }
+        if(CACHE.getChunkCache().size() > 0) {
+            return "";
+        }
+        final String text = CACHE.getTabListCache().getTabList().getHeader();
+        final String pos = text.replaceAll(".*Position in queue: §l", "")
+                .replaceAll("§6.*", ""); // TODO the \n is still in the string as an "n" and idk how to remove it
+        final String time = text.replaceAll(".*Estimated time: §l", "")
+                .replaceAll("\n.*", ""); // TODO this seems to do nothing since "n\"}" is still in the text :/
+
+        return desiredText.replace("{pos}", pos)
+                .replace("{time}", time);
     }
 
     private float lastHealth;

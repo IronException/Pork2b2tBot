@@ -99,4 +99,8 @@ public class ChunkCache implements CachedData, BiFunction<Column, Column, Column
     public String getSendingMessage() {
         return String.format("Sending %d chunks", this.cache.size());
     }
+
+    public int size() {
+        return cache.size();
+    }
 }
