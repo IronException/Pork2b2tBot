@@ -4,6 +4,7 @@ import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -26,6 +27,19 @@ public class DiscordBot {
                 sendTabMessageForced();
             } else if (message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
                 Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
+            } else if(message.equals("queue")) {
+                sendMessageForced(calculateQueueData("position: {pos}\nestimated time: {time}").orElse("you are not in the queue"));
+            } else if(message.equals("health")) {
+                sendMessageForced(String.format("health: %.1f", CACHE.getPlayerCache().getThePlayer().getHealth()));
+            } else if(message.equals("status")) {
+                sendMessageForced(String.format("gamemode: %s\ndimension: %s\ndifficulty: %s\nhealth: %.1f\nfood: %d\nsaturation: %.1f",
+                        CACHE.getPlayerCache().getGameMode(),
+                        CACHE.getPlayerCache().getDimension(),
+                        CACHE.getPlayerCache().getDifficulty(),
+                        CACHE.getPlayerCache().getThePlayer().getHealth(),
+                        CACHE.getPlayerCache().getThePlayer().getFood(),
+                        CACHE.getPlayerCache().getThePlayer().getSaturation()));
+                // TODO send more information...
             }
             // TODO commands to send certain packets?
             // TODO commands to change config?
@@ -88,7 +102,7 @@ public class DiscordBot {
         final String activity = text
                 .replaceAll("<queue>.*</queue>",
                         calculateQueueData(text.replaceAll(".*<queue>", "")
-                        .replaceAll("</queue>.*", "")));
+                        .replaceAll("</queue>.*", "")).orElse(""));
 
         if(lastActivity == null
             || !lastActivity.equals(activity)) {
@@ -100,12 +114,12 @@ public class DiscordBot {
 
     }
 
-    private String calculateQueueData(final String desiredText) {
+    private Optional<String> calculateQueueData(final String desiredText) {
         if (!"2b2t.org".equals(CONFIG.client.server.address)) {
-            return "";
+            return Optional.empty();
         }
         if(CACHE.getChunkCache().size() > 0) {
-            return "";
+            return Optional.empty();
         }
         final String text = CACHE.getTabListCache().getTabList().getHeader();
         final String pos = text.replaceAll(".*Position in queue: §l", "")
@@ -113,8 +127,8 @@ public class DiscordBot {
         final String time = text.replaceAll(".*Estimated time: §l", "")
                 .replaceAll("\n.*", ""); // TODO this seems to do nothing since "n\"}" is still in the text :/
 
-        return desiredText.replace("{pos}", pos)
-                .replace("{time}", time);
+        return Optional.of(desiredText.replace("{pos}", pos)
+                .replace("{time}", time));
     }
 
     private float lastHealth;
@@ -132,7 +146,7 @@ public class DiscordBot {
         if(lastHealth != health
             || lastFood != food
             || lastSaturation != saturation) { // TODO should I instead check for the last message?
-            statusText.set(String.format("health: %.1f, food: %d, saturation: %.1f", health, food, saturation));
+            statusText.set(String.format("health: %.1f\nood: %d\nsaturation: %.1f", health, food, saturation));
             trySendMessage(statusText, lastStatusTime, CONFIG.discordBot.sendMessage.status.delay);
 
             lastHealth = health;
