@@ -47,6 +47,7 @@ public class DiscordBot {
                     updateActivity();
                     // TODO I have no clue but could there be some concurrent modification exception?
                     trySendMessage(statusText, lastStatusTime, CONFIG.discordBot.sendMessage.status.delay);
+                    trySendTabMessage();
 
                     try {
                         Thread.sleep(CONFIG.discordBot.sleepTime);
@@ -111,7 +112,6 @@ public class DiscordBot {
             || lastSaturation != saturation) { // TODO should I instead check for the last message?
             statusText.set(String.format("health: %.1f, food: %d, saturation: %.1f", health, food, saturation));
             trySendMessage(statusText, lastStatusTime, CONFIG.discordBot.sendMessage.status.delay);
-            trySendTabMessage();
 
             lastHealth = health;
             lastFood = food;
@@ -138,7 +138,7 @@ public class DiscordBot {
             || !lastFooter.equals(footer)) {
 
             sendTab = true;
-
+            trySendTabMessage();
             
             lastHeader = header;
             lastFooter = footer;
@@ -172,6 +172,7 @@ public class DiscordBot {
         // TODO parameters for how many players to list (maybe also whether \n or , )
         final TabList tabList = CACHE.getTabListCache().getTabList();
         sendMessageForced("```\n " + convertMinecraftMessage(tabList.getHeader()) + " ```");
+        sendMessageForced("tabPlayerList: " + tabList.getEntries().size());
         sendMessageForced("```\n " + convertMinecraftMessage(tabList.getFooter()) + " ```");
     }
 
