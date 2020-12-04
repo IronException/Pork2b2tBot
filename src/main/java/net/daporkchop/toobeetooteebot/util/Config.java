@@ -210,7 +210,7 @@ public final class Config {
         }
 
         public static final class Activity {
-            public String text = "{playerName} on {serverIp}"; // TODO is there some way to list all the possible shortcuts?
+            public String text = "{playerName} on {serverIp}{playerName} on {serverIp}<queue> in queue at {pos} for {time}</queue>"; // TODO is there some way to list all the possible shortcuts?
             public long delay = 12 * 60 * 1000;
             public boolean enabled = true;
         }
