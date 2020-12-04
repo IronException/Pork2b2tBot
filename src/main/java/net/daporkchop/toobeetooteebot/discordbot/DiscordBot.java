@@ -53,10 +53,12 @@ public class DiscordBot {
         }
     }
 
-    public void disconnect() { }
+    public void disconnect() {
+        discordHandler.stop();
+    }
 
     public void setupUpdateThread() {
-            new Thread(() -> {
+            final Thread discordUpdates = new Thread(() -> {
                 while (isOnline()) {
                     updateActivity();
                     // TODO I have no clue but could there be some concurrent modification exception?
@@ -69,7 +71,9 @@ public class DiscordBot {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            });
+            discordUpdates.setDaemon(true);
+            discordUpdates.start();
     }
 
 

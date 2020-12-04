@@ -30,14 +30,15 @@ import net.daporkchop.lib.imaging.bitmap.icon.DirectIconARGB;
 import net.daporkchop.toobeetooteebot.Bot;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
+import static net.daporkchop.toobeetooteebot.util.Constants.CONFIG;
+import static net.daporkchop.toobeetooteebot.util.Constants.VERSION;
 
 /**
  * @author DaPorkchop_
@@ -81,10 +82,7 @@ public class Gui {
                         .setTextPos(Alignment.CENTER)
                         .setTextColor(Color.RED))
                 .addStateListener(WindowState.CLOSED, () -> {
-                    SHOULD_RECONNECT = false;
-                    if (Bot.getInstance().isConnected()) {
-                        Bot.getInstance().getClient().getSession().disconnect("user disconnect");
-                    }
+                    Bot.getInstance().stop();
                     this.window.release();
                 })
                 .show();

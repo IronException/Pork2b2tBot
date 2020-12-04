@@ -118,10 +118,7 @@ public class Bot {
                             }
                         }
                     }
-                    SHOULD_RECONNECT = false;
-                    if (this.isConnected()) {
-                        this.client.getSession().disconnect("user disconnect");
-                    }
+                    stop();
                     mainThread.interrupt();
                 }, "Pork2b2tBot command processor thread");
                 commandReaderThread.setDaemon(true);
@@ -229,6 +226,17 @@ public class Bot {
             WEBSOCKET_SERVER.shutdown();
             saveConfig();
         }
+    }
+
+    public void stop() {
+        SHOULD_RECONNECT = false;
+        if (this.isConnected()) {
+            this.client.getSession().disconnect("user disconnect");
+        }
+        // TODO this is called from the handler where you press enter twice that interrupts the main thread and also from when you close the window...
+        // TODO each does an additional task but different...
+        // TODO ig we need to call something extra here but idk what...
+        DISCORD_BOT.disconnect();
     }
 
     protected void connect() {

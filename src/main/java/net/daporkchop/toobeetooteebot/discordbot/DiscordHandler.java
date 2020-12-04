@@ -39,8 +39,14 @@ public class DiscordHandler extends ListenerAdapter {
         return jda != null;
     }
 
+    public void stop() {
+        if(isRunning()) {
+            // TODO just shutdown is better imo but it takes way too long
+            jda.shutdownNow();
+        }
+    }
 
-    //@Override
+    @Override
     public void onMessageReceived(final MessageReceivedEvent event) {
 
         if (event.isFromType(ChannelType.TEXT)) {
