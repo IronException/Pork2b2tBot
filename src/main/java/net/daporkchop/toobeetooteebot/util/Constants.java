@@ -48,6 +48,7 @@ import net.daporkchop.toobeetooteebot.server.handler.incoming.movement.PlayerRot
 import net.daporkchop.toobeetooteebot.server.handler.outgoing.LoginSuccessOutgoingHandler;
 import net.daporkchop.toobeetooteebot.server.handler.postoutgoing.JoinGamePostHandler;
 import net.daporkchop.toobeetooteebot.util.cache.DataCache;
+import net.daporkchop.toobeetooteebot.util.handler.CommandHandler;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 import net.daporkchop.toobeetooteebot.websocket.WebSocketServer;
 
@@ -85,6 +86,7 @@ public class Constants {
     public final DataCache       CACHE;
     public final WebSocketServer WEBSOCKET_SERVER;
     public final DiscordBot      DISCORD_BOT;
+    public final CommandHandler  COMMAND_HANDLER;
 
     public final HandlerRegistry<PorkClientSession> CLIENT_HANDLERS = new HandlerRegistry.Builder<PorkClientSession>()
             .setLogger(CLIENT_LOG)
@@ -183,6 +185,7 @@ public class Constants {
         CACHE = new DataCache();
         WEBSOCKET_SERVER = new WebSocketServer();
         DISCORD_BOT = new DiscordBot();
+        COMMAND_HANDLER = new CommandHandler();
     }
 
     public volatile boolean SHOULD_RECONNECT; // TODO this should not be set to false maybe...

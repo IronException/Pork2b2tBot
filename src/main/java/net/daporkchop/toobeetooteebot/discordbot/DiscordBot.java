@@ -1,8 +1,8 @@
 package net.daporkchop.toobeetooteebot.discordbot;
 
 import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
-import net.daporkchop.toobeetooteebot.Bot;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
+import net.daporkchop.toobeetooteebot.util.handler.CommandHandler;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,29 +22,13 @@ public class DiscordBot {
     }
 
     public void connect() {
-        discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId, message -> {
-            if (message.equals("tab")) {
-                sendTabMessageForced();
-            } else if (message.equals("dc") || message.equals("disconnect") || message.equals("reconnect")) {
-                Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
-            } else if(message.equals("queue")) {
-                sendMessageForced(calculateQueueData("position: {pos}\nestimated time: {time}").orElse("you are not in the queue"));
-            } else if(message.equals("health")) {
-                sendMessageForced(String.format("health: %.1f", CACHE.getPlayerCache().getThePlayer().getHealth()));
-            } else if(message.equals("status")) {
-                sendMessageForced(String.format("gamemode: %s\ndimension: %s\ndifficulty: %s\nhealth: %.1f\nfood: %d\nsaturation: %.1f",
-                        CACHE.getPlayerCache().getGameMode(),
-                        CACHE.getPlayerCache().getDimension(),
-                        CACHE.getPlayerCache().getDifficulty(),
-                        CACHE.getPlayerCache().getThePlayer().getHealth(),
-                        CACHE.getPlayerCache().getThePlayer().getFood(),
-                        CACHE.getPlayerCache().getThePlayer().getSaturation()));
-                // TODO send more information...
-            }
-            // TODO commands to send certain packets?
-            // TODO commands to change config?
-
-        });
+        discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId,
+                message -> COMMAND_HANDLER.handleCommand(message, false, this::sendMessageForced, new CommandHandler.CommandAcceptor() {
+                    @Override
+                    public void sendTabMessage() {
+                        sendTabMessageForced();
+                    }
+                }));
         if (isOnline()) { // TODO I dont think that check will work actually :thinking:
             DISCORD_LOG.success("Discord bot started!");
             setupUpdateThread();

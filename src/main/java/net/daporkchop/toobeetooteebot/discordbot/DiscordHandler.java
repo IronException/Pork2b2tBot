@@ -10,7 +10,7 @@ import net.dv8tion.jda.internal.utils.Helpers;
 
 import java.util.Objects;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
+import static net.daporkchop.toobeetooteebot.util.Constants.DISCORD_LOG;
 
 /**
  * class that handles what needs to get sent to discord and the messages received from discord.
@@ -56,7 +56,8 @@ public class DiscordHandler extends ListenerAdapter {
             System.out.printf("[PM] %#s: %s%n", event.getAuthor(), event.getMessage().getContentDisplay());
         }
 
-        if(event.getChannel().getIdLong() == channelId) {
+        if(event.getChannel().getIdLong() == channelId && !event.getAuthor().isBot()) {
+            event.getMessage().addReaction("U+2705").queue(); // white_check_mark
             messageListener.onMessage(event.getMessage().getContentDisplay());
         }
 

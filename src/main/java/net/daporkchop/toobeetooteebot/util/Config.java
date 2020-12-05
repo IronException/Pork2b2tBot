@@ -35,6 +35,7 @@ public final class Config {
     public Server server = new Server();
     public Websocket websocket = new Websocket();
     public DiscordBot discordBot = new DiscordBot();
+    public Commands commands = new Commands();
 
     public static final class Authentication {
         public boolean doAuthentication = false;
@@ -217,6 +218,16 @@ public final class Config {
             public long delay = 12 * 60 * 1000;
             public boolean enabled = true;
         }
+
+    }
+
+    public static final class Commands {
+
+        public boolean enabled = true;
+
+        public String prefix = "!";
+        public boolean cancelIfPrefix = false;
+        // TODO also settings who can do the commands (if someone else msgs in game, who is connected, a discord user, cli?)
 
     }
 
