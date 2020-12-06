@@ -33,11 +33,17 @@ public class CommandHandler {
             return false;
         }
 
-        if(checkCommands(message, result, specific)) {
+        if(checkCommands(message.substring(CONFIG.commands.prefix.length()), result, specific)) {
             return true;
         }
 
-        return CONFIG.commands.cancelIfPrefix;
+        if(CONFIG.commands.cancelIfPrefix) {
+
+            result.accept("Unknown command: " + message);
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -45,7 +51,10 @@ public class CommandHandler {
         if (command.equals("tab")) {
             specific.sendTabMessage();
         } else if (command.equals("dc") || command.equals("disconnect") || command.equals("reconnect")) {
-            Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
+            Bot.getInstance().getClient().getSession().disconnect("User forced disconnect", false);
+        }  else if (command.equals("shutdown") || command.equals("reboot")) {
+            SHOULD_RECONNECT = false;
+            Bot.getInstance().getClient().getSession().disconnect("User forced disconnect", false);
         } else if(command.equals("queue")) {
             result.accept(QUEUE_HANDLER.calculateQueueData("position: {pos}\nestimated time: {time}").orElse("you are not in the queue"));
             // TODO make as specific

@@ -27,9 +27,7 @@ import net.daporkchop.lib.unsafe.PUnsafe;
 import net.daporkchop.toobeetooteebot.server.PorkServerConnection;
 import net.daporkchop.toobeetooteebot.util.handler.HandlerRegistry;
 
-import java.lang.reflect.Field;
-
-import static net.daporkchop.toobeetooteebot.util.Constants.*;
+import static net.daporkchop.toobeetooteebot.util.Constants.COMMAND_HANDLER;
 
 /**
  * @author DaPorkchop_
@@ -39,24 +37,8 @@ public class ServerChatHandler implements HandlerRegistry.IncomingHandler<Client
 
     @Override
     public boolean apply(@NonNull ClientChatPacket packet, @NonNull PorkServerConnection session) {
-        if (packet.getMessage().startsWith("!"))   {
-            if (packet.getMessage().startsWith("!!"))   {
-                //allow sending ingame commands to bots or whatever
-                PUnsafe.putObject(packet, CLIENTCHATPACKET_MESSAGE_OFFSET, packet.getMessage().substring(1));
-                return true;
-            } else if ("!dc".equalsIgnoreCase(packet.getMessage())) {
-                session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
-                return false;
-            } else if ("!reboot".equalsIgnoreCase(packet.getMessage())) {
-                SHOULD_RECONNECT = false;
-                session.getBot().getClient().getSession().disconnect("User forced disconnect", false);
-                return false;
-            } else {
-                session.send(new ServerChatPacket(String.format("§cUnknown command: §o%s", packet.getMessage()), true));
-                return false;
-            }
-        }
-        return true;
+        return COMMAND_HANDLER.handleCommand(packet.getMessage(), result -> session.send(
+                new ServerChatPacket("§c" + result, true)));
     }
 
     @Override
