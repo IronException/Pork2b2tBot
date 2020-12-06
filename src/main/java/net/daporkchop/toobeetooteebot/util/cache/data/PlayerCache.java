@@ -25,6 +25,7 @@ import com.github.steveice10.mc.protocol.data.game.entity.player.GameMode;
 import com.github.steveice10.mc.protocol.data.game.setting.Difficulty;
 import com.github.steveice10.mc.protocol.data.game.world.WorldType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 import com.github.steveice10.packetlib.packet.Packet;
 import lombok.Getter;
@@ -51,6 +52,11 @@ public class PlayerCache implements CachedData {
     protected boolean reducedDebugInfo;
     protected int maxPlayers;
     protected int dimension;
+
+    protected float experience;
+    protected int level;
+    protected int totalExperience;
+
     @NonNull
     protected GameMode gameMode;
     @NonNull
@@ -65,6 +71,7 @@ public class PlayerCache implements CachedData {
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         consumer.accept(new ServerWindowItemsPacket(0, this.inventory.clone()));
+        consumer.accept(new ServerPlayerSetExperiencePacket(experience, level, totalExperience));
         consumer.accept(new ServerPlayerPositionRotationPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
     }
 

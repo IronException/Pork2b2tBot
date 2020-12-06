@@ -20,6 +20,7 @@
 
 package net.daporkchop.toobeetooteebot.util;
 
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -100,6 +101,7 @@ public class Constants {
             .registerInbound(new MultiBlockChangeHandler())
             .registerInbound(new PlayerHealthHandler())
             .registerInbound(new PlayerPosRotHandler())
+            .registerInbound(new PlayerSetExperienceHandler())
             .registerInbound(new RespawnHandler())
             .registerInbound(new SetSlotHandler())
             .registerInbound(new SetWindowItemsHandler())
