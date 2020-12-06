@@ -3,8 +3,7 @@ package net.daporkchop.toobeetooteebot.util.handler;
 import net.daporkchop.toobeetooteebot.Bot;
 import java.util.function.Consumer;
 
-import static net.daporkchop.toobeetooteebot.util.Constants.CACHE;
-import static net.daporkchop.toobeetooteebot.util.Constants.CONFIG;
+import static net.daporkchop.toobeetooteebot.util.Constants.*;
 
 public class CommandHandler {
 
@@ -17,15 +16,15 @@ public class CommandHandler {
      */
     public boolean handleCommand(final String message, final Consumer<String> result) {
         // TODO maybe also as parameter where the message is from / specific results... (eg embeds for discord...)
-        return handleCommand(message, true, result, new CommandAcceptor() {
+        return handleCommand(message, result, new CommandAcceptor() {
             @Override
             public void sendTabMessage() {
-
+                result.accept("// TODO send tab here...");
             }
         });
     }
 
-    public boolean handleCommand(final String message, final boolean justNormalString, final Consumer<String> result, final CommandAcceptor special) {
+    public boolean handleCommand(final String message, final Consumer<String> result, final CommandAcceptor specific) {
         // TODO maybe change embed to a sorted hashmap with entries?
         if(!CONFIG.commands.enabled) {
             return false;
@@ -34,7 +33,7 @@ public class CommandHandler {
             return false;
         }
 
-        if(checkCommands(message, justNormalString, result, special)) {
+        if(checkCommands(message, result, specific)) {
             return true;
         }
 
@@ -42,20 +41,17 @@ public class CommandHandler {
     }
 
 
-    private boolean checkCommands(final String command, final boolean justNormalString, final Consumer<String> result, final CommandAcceptor specific) {
+    private boolean checkCommands(final String command, final Consumer<String> result, final CommandAcceptor specific) {
         if (command.equals("tab")) {
-            if(justNormalString) {
-                // TODO result.accept(tabData);
-            } else {
-                specific.sendTabMessage();
-            }
-
+            specific.sendTabMessage();
         } else if (command.equals("dc") || command.equals("disconnect") || command.equals("reconnect")) {
             Bot.getInstance().getClient().getSession().disconnect("Discord user forced disconnect");
         } else if(command.equals("queue")) {
-            // TODO sendMessageForced(calculateQueueData("position: {pos}\nestimated time: {time}").orElse("you are not in the queue"));
+            result.accept(QUEUE_HANDLER.calculateQueueData("position: {pos}\nestimated time: {time}").orElse("you are not in the queue"));
+            // TODO make as specific
         } else if(command.equals("health")) {
-            // TODO sendMessageForced(String.format("health: %.1f", CACHE.getPlayerCache().getThePlayer().getHealth()));
+            result.accept(String.format("health: %.1f", CACHE.getPlayerCache().getThePlayer().getHealth()));
+            // TODO make as specific?
         } else if(command.equals("status")) {
             result.accept(String.format("gamemode: %s\ndimension: %s\ndifficulty: %s\nhealth: %.1f\nfood: %d\nsaturation: %.1f",
                     CACHE.getPlayerCache().getGameMode(),
@@ -77,7 +73,7 @@ public class CommandHandler {
 
     public interface CommandAcceptor {
 
-        void sendTabMessage();
+        void sendTabMessage(); // TODO maybe the data can be given in the parameters so it doesnt have to be gotten in the method itself... (no dublicate code)
 
     }
 }

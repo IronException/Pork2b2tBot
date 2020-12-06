@@ -4,7 +4,6 @@ import net.daporkchop.lib.minecraft.text.parser.AutoMCFormatParser;
 import net.daporkchop.toobeetooteebot.util.cache.data.tab.TabList;
 import net.daporkchop.toobeetooteebot.util.handler.CommandHandler;
 
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,7 +22,7 @@ public class DiscordBot {
 
     public void connect() {
         discordHandler.build(CONFIG.discordBot.token, CONFIG.discordBot.channelId,
-                message -> COMMAND_HANDLER.handleCommand(message, false, this::sendMessageForced, new CommandHandler.CommandAcceptor() {
+                message -> COMMAND_HANDLER.handleCommand(message, this::sendMessageForced, new CommandHandler.CommandAcceptor() {
                     @Override
                     public void sendTabMessage() {
                         sendTabMessageForced();
@@ -87,9 +86,10 @@ public class DiscordBot {
                 .replace("{serverIp}", CONFIG.client.server.address);
         // TODO more names
 
+        // this is 2b2t specific (maybe I should put that into Queue2b2t?)
         final String activity = text
                 .replaceAll("<queue>.*</queue>",
-                        calculateQueueData(text.replaceAll(".*<queue>", "")
+                        QUEUE_HANDLER.calculateQueueData(text.replaceAll(".*<queue>", "")
                         .replaceAll("</queue>.*", "")).orElse(""));
 
         if(lastActivity == null
@@ -100,23 +100,6 @@ public class DiscordBot {
         }
 
 
-    }
-
-    private Optional<String> calculateQueueData(final String desiredText) {
-        if (!"2b2t.org".equals(CONFIG.client.server.address)) {
-            return Optional.empty();
-        }
-        if(CACHE.getChunkCache().size() > 0) {
-            return Optional.empty();
-        }
-        final String text = CACHE.getTabListCache().getTabList().getHeader();
-        final String pos = text.replaceAll(".*Position in queue: §l", "")
-                .replaceAll("§6.*", ""); // TODO the \n is still in the string as an "n" and idk how to remove it
-        final String time = text.replaceAll(".*Estimated time: §l", "")
-                .replaceAll("\n.*", ""); // TODO this seems to do nothing since "n\"}" is still in the text :/
-
-        return Optional.of(desiredText.replace("{pos}", pos)
-                .replace("{time}", time));
     }
 
     private float lastHealth;
