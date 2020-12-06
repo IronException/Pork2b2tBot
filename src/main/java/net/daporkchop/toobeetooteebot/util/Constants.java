@@ -20,7 +20,6 @@
 
 package net.daporkchop.toobeetooteebot.util;
 
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -90,28 +89,64 @@ public class Constants {
             // Inbound packets
             //
             .registerInbound(new AdvancementsHandler())
-            .registerInbound(new BlockChangeHandler())
+            // TODO AdvancementTab: idk what it does but it might only get sent when in the gui so it's fine not having it
             .registerInbound(new BossBarHandler())
             .registerInbound(new ChatHandler())
-            .registerInbound(new ChunkDataHandler())
-            .registerInbound(new ClientKeepaliveHandler())
-            .registerInbound(new GameStateHandler())
+            // TODO Combat: idk seems like you can get the respawn screen with that?
+            .registerInbound(new ClientKeepAliveHandler())
+            // TODO Difficulty: should implement this
+            // Disconnect: gets handled in another way
             .registerInbound(new JoinGameHandler())
-            .registerInbound(new LoginSuccessHandler())
-            .registerInbound(new MultiBlockChangeHandler())
-            .registerInbound(new PlayerHealthHandler())
-            .registerInbound(new PlayerPosRotHandler())
-            .registerInbound(new PlayerSetExperienceHandler())
+            // KeepAlive: got renamed to ClientKeepAlive
+            // PlayerListData: got renamed to TabListData
+            // PlayerListEntry: got renamed to TabListEntry
+            // TODO PluginMessage: idk but might only be temporary? well maybe not actually?
+            // TODO ResourcePackSend: if server doesn't resend this this needs to be cached :worried:
             .registerInbound(new RespawnHandler())
-            .registerInbound(new SetSlotHandler())
-            .registerInbound(new SetWindowItemsHandler())
+            // TODO SetCompression: idk but might not matter if the proxy handles all ;)
+            // SetCooldown: should only be temporary unless server sends some ridiculous amount
             .registerInbound(new StatisticsHandler())
+            // TODO SwitchCameraPacket: doesn't get sent by servers usually unless you are in spectator and click on an entity but non vanilla servers might do some weird stuff
+            // TabComplete: only gets sent when client is online so nothing to cache here (would be cool to add tab complete to the commands :sunglasses: and cancel it if you would be leaking that you use a hack client)
             .registerInbound(new TabListDataHandler())
             .registerInbound(new TabListEntryHandler())
-            .registerInbound(new UnloadChunkHandler())
+            // TODO Title
             .registerInbound(new UnlockRecipesHandler())
+
+            // WORLD PACKAGE
+            // BlockBreakAnim: is it worth it to implement this?
+            .registerInbound(new BlockChangeHandler())
+            // TODO BlockValue
+            .registerInbound(new ChunkDataHandler())
+            // Explosion: changes are also handled by the server anyway so it doesn't matter
+            .registerInbound(new GameStateHandler())
+            // TODO MapData: should implement this because server only sends map data once
+            .registerInbound(new MultiBlockChangeHandler())
+            // NotifyClient: got renamed to GameState
+            // TODO OpenTileEntityEditor:
+            // PlayBuiltinSound: no need to resend sounds because they are only temporary
+            // PlayEffect: no need to resend effects because they are only temporary
+            // PlaySound: no need to resend sounds because they are only temporary
+            // SpawnParticle: no need to resend particles because they are only temporary
+            // TODO SpawnPosition: idk
+            .registerInbound(new UnloadChunkHandler())
             .registerInbound(new UpdateTileEntityHandler())
-            //ENTITY
+            // TODO UpdateTime: should be implemented for accurate time (low prio)
+            // TODO WorldBorder: should be implemented
+
+            // WINDOW PACKAGE
+            // no need to resend them because they are only temporary and for the open window?
+            .registerInbound(new SetSlotHandler())
+            .registerInbound(new SetWindowItemsHandler())
+
+            // SCOREBOARD PACKAGE
+            // TODO DisplayScoreboard
+            // TODO ScoreboardObjective
+            // TODO Team
+            // TODO UpdateScore
+
+            //ENTITY PACKAGE
+            // TODO EntityAnimation
             .registerInbound(new EntityAttachHandler())
             .registerInbound(new EntityCollectItemHandler())
             .registerInbound(new EntityDestroyHandler())
@@ -119,19 +154,38 @@ public class Constants {
             .registerInbound(new EntityEquipmentHandler())
             .registerInbound(new EntityHeadLookHandler())
             .registerInbound(new EntityMetadataHandler())
+            // TODO EntityMovement
             .registerInbound(new EntityPositionHandler())
             .registerInbound(new EntityPositionRotationHandler())
             .registerInbound(new EntityPropertiesHandler())
             .registerInbound(new EntityRemoveEffectListener())
             .registerInbound(new EntityRotationHandler())
             .registerInbound(new EntitySetPassengersHandler())
+            // TODO EntityStatus
             .registerInbound(new EntityTeleportHandler())
-            //SPAWN
+            // TODO EntityVelocity
+            // TODO VehicleMove
+
+            //SPAWN IN ENTITY PACKAGE
             .registerInbound(new SpawnExperienceOrbHandler())
+            // TODO SpawnGlobalEntity
             .registerInbound(new SpawnMobHandler())
             .registerInbound(new SpawnObjectHandler())
             .registerInbound(new SpawnPaintingPacket())
             .registerInbound(new SpawnPlayerHandler())
+
+            // PLAYER IN ENTITY PACKAGE
+            // TODO PlayerAbilities
+            // TODO PlayerChangeHeldItem
+            .registerInbound(new PlayerHealthHandler())
+            .registerInbound(new PlayerPosRotHandler())
+            .registerInbound(new PlayerSetExperienceHandler())
+            // TODO PlayerUseBed: doesn't get sent by servers usually unless you click on a bed but non vanilla servers might do some weird stuff
+
+            // LOGIN PACKAGE
+            .registerInbound(new LoginSuccessHandler())
+
+
             .build();
 
     public final HandlerRegistry<PorkServerConnection> SERVER_HANDLERS = new HandlerRegistry.Builder<PorkServerConnection>()
